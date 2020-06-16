@@ -1,5 +1,6 @@
 #include<bits/stdc++.h>
 #include "bidirectional_dijkstra.hpp"
+#include "contraction_hierarchies.hpp"
 #include "a_star.hpp"
 using namespace std;
 
@@ -12,7 +13,8 @@ int main()
 
     cout<<"WHICH ALGORITHM TO PERFORM"<<endl;
     cout<<"1) Bi_Diectional dijkstra?"<<endl;
-    cout<<"2) Bi_Directional A* Algorithm"<<endl;
+    cout<<"2) A* Algorithm + Bi Directional"<<endl;
+    cout<<"3) Node Based Contraction Hirarachies"<<endl;
     ll ch;
     cin>>ch;
     if(ch==1){
@@ -29,6 +31,14 @@ int main()
     a_star obj;
     obj.begin();}
 
+    if(ch==3){
+    cout<<"///////////////////////////////"<<endl;
+    cout<<"//  CONTRACTION HIERARCHIES  //"<<endl;
+    cout<<"//////////////////////////////"<<endl<<endl;
+    begin_contraction_hierarchies();
+    }
+
+    
 
     char choice='Y';
     cout<<"Do Again?(Y/N)";
