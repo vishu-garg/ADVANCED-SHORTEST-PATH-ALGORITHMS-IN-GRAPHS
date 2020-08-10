@@ -1,0 +1,17 @@
+a 1 b 2 w 4
+a 2 b 3 w 4
+a 3 b 4 w 6
+a 4 b 3 w 2
+a 5 b 2 w 6
+a 5 b 6 w 9
+a 7 b 8 w 9
+a 2 b 1 w 5
+a 5 b 7 w 4
+a 2 b 5 w 12
+a 2 b 8 w 9
+a 4 b 1 w 8
+a 3 b 6 w 17
+a 7 b 1 w 19
+a 6 b 1 w 3
+Enter Source(s) and Destination(t)- 10
+Enter Source(s) and Destination(t)- 4

@@ -29,54 +29,42 @@ void a_star::input()
     {
         ll u,v,w;
         cin>>u>>v>>w;
-        G1[u].push_back({v,w});
+        G[u].push_back({v,w});
     }
+    reverse_graph();
     cout<<"Number of Queries? ";
     cin>>q;
     rep(i,0,q)
     {
         cout<<i+1<<") "<<endl; 
         cout<<"Source = ";
-        ll s,t;
-        cin>>s;
+        ll s1,t1;
+        cin>>s1;
         cout<<"Destination= ";
-        cin>>t;
-        pre_process_graph(s,t);
-        reverse_graph();
+        cin>>t1;
+        s=s1;t=t1;
+        // cout<<"==============="<<endl;
+        // cout<<"================";
+        // pre_process_graph();
         // cout<<"hello"<<endl;
-        perform_astar(s,t);
-        G.clear();
-        G_r.clear();
-        G=G_r=vector<vector<pair<ll,ll>> >(n+1);
+        perform_astar();
+        // G.clear();
+        // G_r.clear();
+        // G=G_r=vector<vector<pair<ll,ll>> >(n+1);
     }
 }
 
-void a_star::pre_process_graph(ll s, ll t)
+int a_star::calc_h(ll v)
 {
-    vector<ll>dist_s(n+1),dist_t(n+1);
-    vector<ll>h(n+1);
-    rep(i,1,n+1)
-    {
-        dist_s[i]=(ll)sqrt(((coord[i].first-coord[s].first)*(coord[i].first-coord[s].first))+((coord[i].second-coord[s].second)*(coord[i].second-coord[s].second)));
-        dist_t[i]=(ll)sqrt(((coord[i].first-coord[t].first)*(coord[i].first-coord[t].first))+((coord[i].second-coord[t].second)*(coord[i].second-coord[t].second)));
-    }
-    rep(i,1,n+1)
-    {
-        h[i]=(dist_t[i]-dist_s[i])/2;
-    }
+    // cout<<"val1"<<endl;
+    ll dist_s,dist_t,h;
+    dist_s=(ll)sqrt(((coord[v].first-coord[s].first)*(coord[v].first-coord[s].first))+((coord[v].second-coord[s].second)*(coord[v].second-coord[s].second)));
+    dist_t=(ll)sqrt(((coord[v].first-coord[t].first)*(coord[v].first-coord[t].first))+((coord[v].second-coord[t].second)*(coord[v].second-coord[t].second)));
+    
+    // cout<<v<<" -> "<<dist_s<<" "<<dist_t<<endl;
 
-    for(ll i=1;i<=n;i++)
-    {
-        for(auto it:G1[i])
-        {
-            ll u=i;
-            ll v=it.first;
-            ll w=it.second;
-            ll w_2=(w+h[v]-h[u]);
-            G[u].push_back({v,w_2});
-        }
-    }
-
+    h=(dist_t-dist_s)/2;
+    return h;
 }
 
 void a_star::reverse_graph()
@@ -90,8 +78,9 @@ void a_star::reverse_graph()
     }
 }
 
-void a_star::perform_astar(ll s , ll t)
+void a_star::perform_astar()
 {
+    // cout<<"===============";
     vector<ll>dist(n+1,LLONG_MAX),dist_r(n+1,LLONG_MAX);
     vector<ll>prev(n+1,-1),prev_r(n+1,-1);
     dist[s]=0;dist_r[t]=0;
@@ -111,7 +100,7 @@ void a_star::perform_astar(ll s , ll t)
         process(v,G,dist,prev,pq);
         if(vis_r[v])break;
         main_set.insert(v);
-
+        // cout<<v<<endl;
         v=(pq_r.top()).second;
         vis_r[v]++;
         pq_r.pop();
@@ -142,24 +131,32 @@ void a_star::perform_astar(ll s , ll t)
     // cout<<"hello";
 }
 
-void a_star::process(ll u,vector<vector<pair<ll,ll>>>&Gr,vector<ll>&dist,vector<ll>&prev,priority_queue<pair<ll,ll>,vector<pair<ll,ll> >,greater<pair<ll,ll>>>&pq)
+void a_star::process(ll u,vector<vector<pair<ll,ll>>>&Gr1,vector<ll>&dist,vector<ll>&prev,priority_queue<pair<ll,ll>,vector<pair<ll,ll> >,greater<pair<ll,ll>>>&pq)
 {
-    for(auto it : Gr[u])
+    // cout<<"u = "<<u<<endl;
+
+    for(auto it : Gr1[u])
     {
+        // cout<<"00000000000000"<<endl;
         relax(u,it,dist,prev,pq);
     }
 }
 
 void a_star::relax(ll u, pair<ll,ll>it,vector<ll>&dist,vector<ll>&prev,priority_queue<pair<ll,ll>,vector<pair<ll,ll> >,greater<pair<ll,ll>>>&pq)
 {
+    // cout<<"**************"<<endl;
     ll v=it.first;
     ll w=it.second;
-    if(dist[v]>dist[u]+w)
+    ll h_u=(calc_h(u));ll h_v=calc_h(v);
+    // cout<<h_u<<" "<<h_v<<"#####"<<endl;
+    ll w2=w+h_v-h_u;           // the approximated distance we take using heuristics  (h_v,h_u) .....
+    if(dist[v]>dist[u]+w2)
     {
-        dist[v]=dist[u]+w;
+        dist[v]=dist[u]+w2;
         pq.push({dist[v],v});
         prev[v]=u;
     }
+    // cout<<v<<" "<<dist[v]<<"<===="<<endl;
 }
 
 pair<ll,vector<ll>>a_star::ShortestPath(ll s,ll t,vector<ll>&dist,vector<ll>&prev,vector<ll>&dist_r,vector<ll>&prev_r,set<ll>&main_set)
@@ -201,3 +198,10 @@ pair<ll,vector<ll>>a_star::ShortestPath(ll s,ll t,vector<ll>&dist,vector<ll>&pre
         return(make_pair(result,path));
     }
 }
+
+// Open main for debugging purposes only
+// int main()
+// {
+//     a_star obj;
+//     obj.begin();
+// }

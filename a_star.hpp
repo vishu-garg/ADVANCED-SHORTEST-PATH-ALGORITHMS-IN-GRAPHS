@@ -9,8 +9,8 @@ class a_star
     vector<pair<ll,ll> >coord;
     public:
     void begin();
-    void perform_astar(ll,ll);
-    void pre_process_graph(ll s, ll t);
+    void perform_astar();
+    int calc_h(ll v);
     void input();
     void reverse_graph();
     void process(ll,vector<vector<pair<ll,ll>>>&,vector<ll>&,vector<ll>&,priority_queue<pair<ll,ll>,vector<pair<ll,ll> >,greater<pair<ll,ll>>>&);
